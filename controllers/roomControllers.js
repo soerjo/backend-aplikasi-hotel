@@ -3,6 +3,7 @@ const room = require("../models/roomModels");
 //GET => /v1/api/room/roomtype
 exports.getRoomType = async (req, res) => {
   const { type } = req.body;
+  console.log("type: ", type);
   try {
     const kamar = await room.findAll({ where: { type } });
     const filterKamar = kamar.filter((room) => room.status === false);
@@ -58,8 +59,12 @@ exports.makeRoom = async (req, res) => {
 
 //PUT => /v1/api/room/updateroom
 exports.updateRoom = async (req, res) => {
-  const { id } = req.body;
-  const updateData = req.body;
+  const { id, type, status } = req.body;
+  const updateData = {
+    type,
+    status,
+  };
+  console.log("ini update data; ", updateData);
   try {
     const data = await room.update(updateData, { where: { id } });
     return res.json({ message: "success update room", data });

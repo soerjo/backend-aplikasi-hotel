@@ -8,7 +8,7 @@ const {
 
 const router = express.Router();
 
-router.get("/roomtype", getRoomType);
+router.post("/roomtype/", getRoomType);
 router.get("/roombyid", getRoombyId);
 router.post("/makeroom", makeRoom);
 router.put("/updateroom", updateRoom);

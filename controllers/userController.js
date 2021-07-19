@@ -12,29 +12,38 @@ exports.getUsers = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
+  console.log(req.body);
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ where: { email } });
-    console.log("isi user:", user);
+    console.log("isi yg di temukan:", user);
 
     if (!user) {
       res.status(401);
-      return res.json({ status: "error", error: "invalid username/password" });
-    }
-
-    if (await bcrypt.compare(password, user.password)) {
-      res.status(200);
       return res.json({
-        status: "ok",
-        message: "login success",
+        data: { error: "error", message: "invalid username/password" },
       });
     }
 
-    return res.json({ data: user });
+    const check = await bcrypt.compare(password, user.password);
+    console.log(check);
+
+    if (check) {
+      res.status(200);
+      const response = { id: user.id, name: user.name, email: user.email };
+      return res.json({
+        status: "ok",
+        message: "login success",
+        user: { ...response },
+      });
+    }
+
+    res.status(401);
+    return res.json({ message: "error", message: "invalid username/password" });
   } catch (err) {
     console.log(err);
     res.status(404);
-    return res.json({ message: "error", error: err });
+    return res.json({ message: "error", error: err, user: "not response" });
   }
 };
 
@@ -48,7 +57,7 @@ exports.register = async (req, res) => {
       email: email,
       password: password,
     });
-    return res.json({ message: "success create user" });
+    return res.json({ message: "success create user", user });
   } catch (err) {
     console.log(err);
     return res.json({ message: "error", error: err });
