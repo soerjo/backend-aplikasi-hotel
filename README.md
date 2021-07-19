@@ -1,4 +1,4 @@
-# apliasi backend hotel
+# aplikasi backend hotel
 
 aplikasi rest-API untuk frontend hotel. menggunakan express dengan database mysql.
 
